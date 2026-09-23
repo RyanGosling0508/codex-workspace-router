@@ -33,6 +33,8 @@ class RouterTests(unittest.TestCase):
             "scope": {"confirmed": True, "read_roots": [str(self.root)],
                       "write_roots": [str(self.root / "out")], "protected_paths": [str(self.root / "source")]},
             "task": {"trivial": False, "tool_bound": False, "independent": True, "context_complete": True,
+                     "assessment": {"kind": "implement", "specification": "bounded", "verification": "tests",
+                                    "scope": "local", "input_form": "text", "boundary": "clear", "evidence": "Known local interface with a reproducible test"},
                      "work_type": "read", "complexity": "routine", "consequence": "normal", "uncertainty": "normal",
                      "benefit": "parallel", "reasoning_minutes": 6,
                      "read_paths": [str(self.root / "source")], "write_paths": [], "resources": [],
@@ -55,7 +57,9 @@ class RouterTests(unittest.TestCase):
 
     def test_mechanical_route(self):
         self.q["task"].update(complexity="mechanical", uncertainty="low", consequence="low")
+        self.q["task"]["assessment"].update(kind="extract", specification="exact", verification="deterministic")
         self.assertEqual(self.run_route()["recommended"]["model"], "gpt-6-luna")
+        self.assertEqual(self.run_route()["recommended"]["effort"], "high")
 
     def test_high_consequence_and_uncertainty(self):
         self.q["task"].update(complexity="mechanical", consequence="high")
@@ -156,8 +160,8 @@ class RouterTests(unittest.TestCase):
         self.assertEqual(self.run_route()["action"], "delegate")
 
     def test_shared_resource_across_hosts(self):
-        self.q["task"]["resources"] = ["navip-live"]
-        self.q["active"] = [{"host_id": "remote", "read_paths": [], "write_paths": [], "resources": ["navip-live"]}]
+        self.q["task"]["resources"] = ["shared-live-service"]
+        self.q["active"] = [{"host_id": "remote", "read_paths": [], "write_paths": [], "resources": ["shared-live-service"]}]
         self.assertEqual(self.run_route()["action"], "serialize")
 
     def test_slots_and_unavailable_tool(self):

@@ -1,0 +1,205 @@
+{
+  "economy": {
+    "schema_version": 1,
+    "version": "1.3.0",
+    "preference": "quality-first",
+    "enabled": true,
+    "delegation_mode": "evidence-only",
+    "classification_mode": "evidence-v1",
+    "triggers": {
+      "explicit_user": true,
+      "verification_gap": true,
+      "deadline_parallel": true
+    },
+    "max_children": 1,
+    "max_children_per_request": 2,
+    "max_recovery_attempts": 1,
+    "minimum_reasoning_minutes": 5,
+    "catalog_max_age_hours": 6,
+    "lanes": {
+      "mechanical": [
+        [
+          "gpt-6-luna",
+          "high"
+        ],
+        [
+          "gpt-6-sol",
+          "medium"
+        ],
+        [
+          "gpt-6-astra",
+          "low"
+        ]
+      ],
+      "routine": [
+        [
+          "gpt-6-sol",
+          "medium"
+        ],
+        [
+          "gpt-6-astra",
+          "medium"
+        ]
+      ],
+      "complex": [
+        [
+          "gpt-6-sol",
+          "high"
+        ],
+        [
+          "gpt-6-sol",
+          "xhigh"
+        ],
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "critical": [
+        [
+          "gpt-6-astra",
+          "high"
+        ],
+        [
+          "gpt-6-astra",
+          "xhigh"
+        ]
+      ]
+    },
+    "routing_strategy": "economy"
+  },
+  "balanced": {
+    "schema_version": 1,
+    "version": "1.3.0",
+    "preference": "quality-first",
+    "enabled": true,
+    "delegation_mode": "evidence-only",
+    "classification_mode": "evidence-v1",
+    "triggers": {
+      "explicit_user": true,
+      "verification_gap": true,
+      "deadline_parallel": true
+    },
+    "max_children": 1,
+    "max_children_per_request": 2,
+    "max_recovery_attempts": 1,
+    "minimum_reasoning_minutes": 5,
+    "catalog_max_age_hours": 6,
+    "lanes": {
+      "mechanical": [
+        [
+          "gpt-6-luna",
+          "high"
+        ],
+        [
+          "gpt-6-sol",
+          "medium"
+        ],
+        [
+          "gpt-6-astra",
+          "low"
+        ]
+      ],
+      "routine": [
+        [
+          "gpt-6-sol",
+          "medium"
+        ],
+        [
+          "gpt-6-astra",
+          "medium"
+        ]
+      ],
+      "complex": [
+        [
+          "gpt-6-sol",
+          "high"
+        ],
+        [
+          "gpt-6-sol",
+          "xhigh"
+        ],
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "critical": [
+        [
+          "gpt-6-astra",
+          "high"
+        ],
+        [
+          "gpt-6-astra",
+          "xhigh"
+        ]
+      ]
+    },
+    "routing_strategy": "balanced"
+  },
+  "premium": {
+    "schema_version": 1,
+    "version": "1.3.0",
+    "preference": "quality-first",
+    "enabled": true,
+    "delegation_mode": "evidence-only",
+    "classification_mode": "evidence-v1",
+    "triggers": {
+      "explicit_user": true,
+      "verification_gap": true,
+      "deadline_parallel": true
+    },
+    "max_children": 1,
+    "max_children_per_request": 2,
+    "max_recovery_attempts": 1,
+    "minimum_reasoning_minutes": 5,
+    "catalog_max_age_hours": 6,
+    "lanes": {
+      "mechanical": [
+        [
+          "gpt-6-luna",
+          "high"
+        ],
+        [
+          "gpt-6-sol",
+          "medium"
+        ],
+        [
+          "gpt-6-astra",
+          "low"
+        ]
+      ],
+      "routine": [
+        [
+          "gpt-6-sol",
+          "high"
+        ],
+        [
+          "gpt-6-astra",
+          "medium"
+        ]
+      ],
+      "complex": [
+        [
+          "gpt-6-astra",
+          "high"
+        ],
+        [
+          "gpt-6-astra",
+          "xhigh"
+        ]
+      ],
+      "critical": [
+        [
+          "gpt-6-astra",
+          "xhigh"
+        ],
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ]
+    },
+    "routing_strategy": "premium"
+  }
+}

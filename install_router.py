@@ -12,7 +12,8 @@ import uuid
 
 NAME = "workspace-router"
 REQUIRED = {"SKILL.md", "agents/openai.yaml", "scripts/router.py", "references/policy.json",
-            "references/protocol.md", "references/workspaces.md", "references/maintenance.md"}
+            "references/protocol.md", "references/workspaces.md", "references/maintenance.md",
+            "references/default-policy.json", "references/presets.json", "references/presets.md", "references/presets.zh-CN.md", "references/task-boundaries.md", "references/task-boundaries.zh-CN.md"}
 
 
 def linked(path):

@@ -4,9 +4,19 @@
 
 一个以**质量优先、减少不必要代理**为目标的 Codex Skill。默认由主任务直接完成工作，只有具体需要才委派子代理。
 
-**版本 1.1.0 · Python 标准库 · 路由器无需 API Key · MIT 协议**
+**版本 1.3.0 · Python 标准库 · 路由器无需 API Key · MIT 协议**
+
+**默认预设：稳定方案。** 中英控制台可切换经济、稳定、土豪三套方案；[查看方案对比与实测依据](workspace-router/references/presets.zh-CN.md)。
 
 > 它选择的是有明确边界的**子代理**，不能逐条消息切换主模型，也不是请求进入模型之前的网关。不保证节省费用或订阅额度。
+
+## 推荐任务分界
+
+默认要求具体任务依据，按最高适用条件选择 Luna/High、Sol/Medium、Sol/High 或 Astra/High。详见 [严格分界、任务示例与研究依据](workspace-router/references/task-boundaries.zh-CN.md)。控制台可一键恢复整套推荐默认，不用逐档 DIY。
+
+## 可视化控制台
+
+Router Studio 提供中英文切换、模型分档编辑、真实规则模拟、差异确认和历史恢复。使用 `python run_console.py --open` 启动，详见 [控制台说明](CONSOLE.zh-CN.md)。
 
 ## 使用后会发生什么
 
@@ -94,7 +104,7 @@ $workspace-router 按现有验收标准继续实现这个功能。
 
 | 符合条件的工作 | 首选 | 依次回退 |
 |---|---|---|
-| 机械处理、低不确定性、低影响 | `gpt-6-luna` / medium | Sol / medium → Astra / low |
+| 机械处理、低不确定性、低影响 | `gpt-6-luna` / high | Sol / medium → Astra / low |
 | 范围明确的常规实现或分析 | `gpt-6-sol` / medium | Astra / medium |
 | 复杂调试或较高不确定性 | `gpt-6-sol` / high | Astra / high |
 | 出错影响大的正确性决策 | `gpt-6-astra` / high | 不回退到较低档位 |
@@ -106,7 +116,7 @@ $workspace-router 按现有验收标准继续实现这个功能。
 - 开启、质量优先，先检查具体委派必要。
 - **同时最多一个子代理**；**同一用户请求累计最多启动两次**，包含替换和重试。
 - 子代理不能再派代理；每个独立子任务最多一次有证据的推理/验证恢复。
-- 预计至少三分钟推理工作量才考虑委派；这是额外门槛，达到三分钟不代表应该拆分。
+- 预计至少五分钟推理工作量才考虑委派；这是额外门槛，达到五分钟不代表应该拆分。
 - 同一已确认主机，明确读写范围和受保护文件，避免并发写入与共享资源冲突。
 - 模型能力记录最多六小时；重连或更换主机后需重新确认。
 - 上下文不足、收益不明、工具缺失、输入无效或质量档位不可用时，交回主任务。
@@ -145,7 +155,7 @@ Windows 将 `python3 -B` 替换为 `python -X utf8 -B`。CI 配置会在 Windows
 - [`workspaces.md`](workspace-router/references/workspaces.md)：通用多目录 / SSH 检查清单。
 - [`maintenance.md`](workspace-router/references/maintenance.md)：评估、可选元数据记录和策略维护。
 
-公开包使用通用示例，不包含作者的本机路径或私人项目清单。核心路由代码和策略与个人版 1.1.0 一致；私人项目规则留在本地适用的项目说明中。
+公开包使用通用示例，不包含作者的本机路径或私人项目清单。核心路由代码和策略与个人版 1.3.0 一致；私人项目规则留在本地适用的项目说明中。
 
 ## 来源与许可
 
@@ -154,3 +164,7 @@ Windows 将 `python3 -B` 替换为 `python -X utf8 -B`。CI 配置会在 Windows
 接口参考：[Skills](https://learn.chatgpt.com/docs/build-skills)、[Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)、[App Server](https://learn.chatgpt.com/docs/app-server)、[Remote connections](https://learn.chatgpt.com/docs/remote-connections)。
 
 采用 [MIT 协议](LICENSE)。
+
+## 三套完整预设
+
+经济 / 稳定 / 土豪，默认稳定。预设包含完整模型候选与边界策略；选择后先模拟，再确认应用。详见[严格条件与官方、用户实测依据](workspace-router/references/presets.zh-CN.md)。三套都不切换主模型，也不承诺省订阅额度。

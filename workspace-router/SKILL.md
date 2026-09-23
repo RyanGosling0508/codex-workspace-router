@@ -15,6 +15,14 @@ Optimize for **quality first, fewer unnecessary agents**. Keep the current coord
 - Do not start a model just to classify difficulty, rewrite a handoff, summarize another agent, or repeat the main implementation. Use the current context to make the gate decision. A targeted reviewer can inspect correctness, but the coordinator should not blindly reimplement or rerun all successful checks.
 - Preserve the current task's intent and prior decisions, including a short follow-up such as “继续”. Reassess after a meaningful scope change or an observed failure, not after every tool call.
 
+## Task classification and defaults
+
+Read [the task boundaries](references/task-boundaries.md) when preparing an eligible child. Use the installed `references/policy.json` as the current configuration; `references/default-policy.json` is the recommended reset template. Never infer current settings from the example defaults below or a previously cached policy.
+
+The recommended `evidence-v1` classifier requires `task.assessment` with kind, specification, verification, scope, input_form, boundary and concrete evidence. It applies the highest matching rule and preserves the declared complexity as a floor. Only text-only, exact, mechanically checkable, local extraction/transformation with low consequence and low uncertainty qualifies for Luna/high. Bounded routine work uses Sol/medium; cross-component, open, uncertain or judgment-heavy investigation uses Sol/high; high-consequence work and open/uncertain system design use Astra/high. Missing assessment means no automatic dispatch. These are operational boundaries, not guarantees of model quality.
+
+Read [presets and evidence](references/presets.md) for economic trial and premium ambiguity rules. The paragraph above describes Balanced defaults. Economy may try the deterministic candidate pool for strictly testable low-risk local implementation; retain the routine recovery floor. Premium promotes evidenced adjacent-lane ambiguity. Record `boundary_evidence` when boundary is adjacent; significant unresolved uncertainty remains high. Every preset preserves acceptance and the direct-by-default gate.
+
 ## Before delegation
 
 Read [the host and workspace checklist](references/workspaces.md) for multi-root projects, shared resources, or SSH. Read [the protocol](references/protocol.md) when making a router request or managing a child. Do not read all references on simple direct work.

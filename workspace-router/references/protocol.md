@@ -1,6 +1,6 @@
 # Request and lifecycle protocol
 
-The coordinator classifies the task. This helper deterministically checks that classification against policy and supplied observations. It does not classify natural language, call models, dispatch tools, prove permissions, or establish OS isolation. Keep the current coordinator by default, including for large tasks. In version 1.1, missing delegation evidence returns direct before collecting scope/catalog facts; old request producers cannot silently retain broad automatic fan-out.
+The coordinator classifies the task. This helper deterministically checks that classification against policy and supplied observations. It does not classify natural language, call models, dispatch tools, prove permissions, or establish OS isolation. Keep the current coordinator by default, including for large tasks. Since version 1.1, missing delegation evidence returns direct before collecting scope/catalog facts; old request producers cannot silently retain broad automatic fan-out.
 
 ## Gather the inputs
 
@@ -17,7 +17,9 @@ Use JSON schema version 1. All paths are absolute paths on the execution host. R
 - `depth`: 0 for coordinator, greater than 0 for a child. Optional `enabled:false` or `disable_delegation:true` stops delegation immediately.
 - Optional `current`: `{source:"runtime",model,effort}` only from runtime observation; omit if unknown. Optional `explicit`: `{model,effort}` for a user-pinned **child** route. A request to change the main model must be explained as outside this Skill's capability.
 
-Complexity: mechanical means a deterministic, narrow transformation with low uncertainty and low consequences; routine means a bounded implementation with known interfaces; complex means cross-file reasoning, ambiguous design, or nontrivial debugging; critical means consequential correctness decisions or high cost of a mistake. High consequence forces critical, high uncertainty forces at least complex. The minute threshold is an initial heuristic, not measured savings. Do not inflate it to obtain a child.
+The recommended policy now also requires `task.assessment:{kind,specification,verification,scope,input_form,boundary,evidence}`. Read [task boundaries](task-boundaries.md) for exact enums, admission conditions and examples. Policy `classification_mode` is `evidence-v1` in version 1.3; absent or `legacy` retains pre-1.3 classification for old imported policies. Never silently omit the assessment in a new-policy request.
+
+Legacy complexity: mechanical means a deterministic, narrow transformation with low uncertainty and low consequences; routine means a bounded implementation with known interfaces; complex means cross-file reasoning, ambiguous design, or nontrivial debugging; critical means consequential correctness decisions or high cost of a mistake. High consequence forces critical, high uncertainty forces at least complex. The minute threshold is an initial heuristic, not measured savings. Do not inflate it to obtain a child.
 
 ## Minimal complete example
 
@@ -35,6 +37,7 @@ Illustration only: replace all host/path/catalog facts with observed values. Thi
     "trivial":false, "tool_bound":false, "independent":true, "context_complete":true,
     "work_type":"read", "complexity":"complex", "consequence":"normal", "uncertainty":"normal",
     "benefit":"quality", "reasoning_minutes":8,
+    "assessment":{"kind":"review", "specification":"bounded", "verification":"judgment", "scope":"cross_component", "input_form":"text", "boundary":"clear", "evidence":"Axis conversion crosses geometry and rendering components; mirrored-coordinate fixtures are missing"},
     "read_paths":["C:/work/example-project/src"], "write_paths":[], "resources":[],
     "acceptance":["Report reproducible coordinate-transform defects with source locations"],
     "constraints":["Read only; do not run commands that create caches"]
@@ -58,14 +61,22 @@ Use the absolute installed skill path. POSIX uses its observed `python3` executa
 
 ## Interpret and dispatch
 
-`delegate` is advice to dispatch within existing authorization. `direct` means keep the coordinator; fix any invalid scope before performing the work. `serialize` means wait for the conflicting owner or choose an independent task. `report_unsupported` means a pinned route could not be honored. `actual:null` is intentional: the helper never executes a model.
+`delegate` is advice to dispatch within existing authorization. `direct` means keep the coordinator; fix any invalid scope before performing the work. `serialize` means wait for the conflicting owner or choose an independent task. `report_unsupported` means a pinned route could not be honored. `classification` records the selected rubric and matching reason codes when classification is reached. It describes supplied evidence, not independently measured difficulty. `actual:null` is intentional: the helper never executes a model.
 
 For the collaboration API, use only actual supported fields, e.g. `task_name`, a self-contained `message`, `model`, `reasoning_effort`, `fork_turns:"none"`. The helper's `host_id`, `cwd` and path lists belong in the message, not invented API parameters. A prompt scope is not a sandbox. Children must inherit runtime restrictions and obey their narrower task scope. Include the real goal and needed source facts, not just the JSON routing metadata. Review all required results before answering the user.
 
-Track the child ID, route requested, actual route if exposed, own task scope, status, acceptance and cumulative child-start count in this request's working context. No cross-request child reuse. Runtime metadata can confirm a model; child prose cannot. This version has no background daemon, automatic event subscription, or persistent scheduler. Defaults are one active child and two total starts. A child returning idle/completed does not refill the total budget. `cost_savings_verified:false` is intentional: none of these routing observations establishes savings.
+Track the child ID, route requested, actual route if exposed, own task scope, status, acceptance and cumulative child-start count in this request's working context. No cross-request child reuse. Runtime metadata can confirm a model; child prose cannot. This version has no background daemon, automatic event subscription, or persistent scheduler. Recommended defaults are one active child, two total starts, and at least five reasoning minutes; read the current policy each time. A child returning idle/completed does not refill the total budget. `cost_savings_verified:false` is intentional: none of these routing observations establishes savings.
 
 ## Completion and recovery
 
 `reconcile --input lifecycle.json` takes `{state,acceptance,progress_overdue?}`. States: `running`, `idle`, `completed`, `failed`, `interrupted`; acceptance: `pending`, `passed`, `failed`. Completed/pending produces `validate`, completed/passed produces `accept`; failed/interrupted cannot be accepted. Overdue progress calls for inspection, never automatic interruption. Runtime wait tools provide progress; the helper itself does not wait.
 
 At most one classified reasoning/verification recovery per bounded task; carry the counter across attempts. It may move up one policy lane. Infrastructure failures stay infrastructure failures. Repeated or ambiguous failure returns to coordinator diagnosis with evidence. Never silently retry a user-pinned unavailable model as another model.
+
+## Policy trigger switches (1.2)
+
+Optional `triggers` contains boolean `explicit_user`, `verification_gap` and `deadline_parallel` switches. Missing switches default to true for compatibility. A false switch returns direct execution with reason `delegation-trigger-disabled`; it never overrides user instructions or grants execution permissions.
+
+## Preset behavior (1.3)
+
+`routing_strategy` is `economy`, `balanced` (default when absent), or `premium`. Read [presets and evidence](presets.md). In evidence-v1, assessment also requires `input_form` (`text`/`visual`) and `boundary` (`clear`/`adjacent`); adjacent requires concrete string `boundary_evidence`. Text means no visual perception is required; source code is text. Do not mark important unresolved uncertainty merely adjacent. Economic local trials retain routine classification but record `candidate_pool: mechanical`; failure recovery starts from routine. Premium promotes evidenced ambiguity before diagnosed recovery. Explicit user routes remain authoritative.

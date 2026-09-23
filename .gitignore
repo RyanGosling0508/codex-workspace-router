@@ -10,3 +10,4 @@ dist/
 route.local.json
 .DS_Store
 Thumbs.db
+.local/

@@ -28,3 +28,5 @@ jobs:
         run: python -X utf8 -B -m unittest discover -s workspace-router/tests -v
       - name: Test installer and rollback safeguards
         run: python -X utf8 -B -m unittest discover -s . -p test_installer.py -v
+      - name: Test local console and policy changes
+        run: python -X utf8 -B -m unittest console.test_console -v

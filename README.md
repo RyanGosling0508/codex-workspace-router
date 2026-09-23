@@ -4,9 +4,19 @@
 
 A Codex skill for **quality-first work with fewer unnecessary agents**. Keep the main agent by default. Delegate only when a concrete need justifies the handoff.
 
-**Version 1.1.0 · Python standard library · No router API key · MIT**
+**Version 1.3.0 · Python standard library · No router API key · MIT**
+
+**Default preset: Balanced.** Choose Economy, Balanced or Premium in the bilingual console; [compare the presets and their evidence](workspace-router/references/presets.md).
 
 > This skill selects bounded **subagents**, not the main model for each message. It is not a pre-request model gateway and does not guarantee lower cost or quota usage.
+
+## Recommended task boundaries
+
+Defaults now require explicit task evidence and use Luna/high, Sol/medium, Sol/high or Astra/high according to the highest matching condition. Read the [exact boundaries, examples and research basis](workspace-router/references/task-boundaries.md). The console can restore the complete recommended policy without editing each lane.
+
+## Visual console
+
+Router Studio includes Chinese/English switching, editable model lanes, rule simulations, reviewed saves and version history. Start with `python run_console.py --open`. Read the [console guide](CONSOLE.md).
 
 ## What happens when you use it?
 
@@ -94,7 +104,7 @@ Only **after** delegation is justified, these initial lanes apply:
 
 | Eligible work | First candidate | Ordered fallback |
 |---|---|---|
-| Mechanical, low uncertainty and low consequence | `gpt-6-luna` / medium | Sol / medium → Astra / low |
+| Mechanical, low uncertainty and low consequence | `gpt-6-luna` / high | Sol / medium → Astra / low |
 | Bounded routine implementation or analysis | `gpt-6-sol` / medium | Astra / medium |
 | Complex debugging or high uncertainty | `gpt-6-sol` / high | Astra / high |
 | High-consequence correctness decisions | `gpt-6-astra` / high | No lower-lane fallback |
@@ -145,7 +155,7 @@ Before publication, Windows tests passed with the symlink test skipped where the
 - [`workspaces.md`](workspace-router/references/workspaces.md): generic multi-root / SSH checklist.
 - [`maintenance.md`](workspace-router/references/maintenance.md): evaluation, optional metadata-only audit and policy updates.
 
-The public package contains generic examples, not the original author's machine paths or private project inventory. Its core router and policy match the personalized 1.1.0 edition; keep private project rules in applicable local project instructions.
+The public package contains generic examples, not the original author's machine paths or private project inventory. Its core router and policy match the personalized 1.3.0 edition; keep private project rules in applicable local project instructions.
 
 ## Provenance and license
 
@@ -154,3 +164,7 @@ Independent implementation informed by the workflow idea in [codex-auto-model-ro
 Interface references: [Skills](https://learn.chatgpt.com/docs/build-skills), [Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents), [App Server](https://learn.chatgpt.com/docs/app-server), [Remote connections](https://learn.chatgpt.com/docs/remote-connections).
 
 [MIT License](LICENSE).
+
+## Three complete presets
+
+Economy / Balanced / Premium, with Balanced as default. Each preset replaces routes and boundary behavior; simulate the draft, then review and apply. See [admission rules and official/user evidence](workspace-router/references/presets.md). No main-model switch or subscription savings guarantee.

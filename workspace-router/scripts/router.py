@@ -17,11 +17,13 @@ import re
 import sys
 import uuid
 
-VERSION = "1.1.0"
+VERSION = "1.3.0"
 EFFORTS = ["low", "medium", "high", "xhigh", "max", "ultra"]
 LANES = ["mechanical", "routine", "complex", "critical"]
 NON_REASONING_FAILURES = {"environment", "permission", "network", "auth", "model_unavailable"}
 DEFAULT_POLICY = Path(__file__).resolve().parents[1] / "references" / "policy.json"
+RECOMMENDED_POLICY = DEFAULT_POLICY.with_name("default-policy.json")
+PRESETS = DEFAULT_POLICY.with_name("presets.json")
 
 
 def read_json(path):
@@ -100,6 +102,8 @@ def validate_policy(policy):
     flag(policy["enabled"])
     enum(policy["preference"], {"quality-first"})
     enum(policy["delegation_mode"], {"evidence-only"})
+    enum(policy.get("classification_mode", "legacy"), {"legacy", "evidence-v1"})
+    enum(policy.get("routing_strategy", "balanced"), {"economy", "balanced", "premium"})
     if not 1 <= count(policy["max_children_per_request"]) <= 3:
         raise ValueError("total child budget must be between one and three")
     for key in ("max_children", "max_recovery_attempts"):
@@ -108,6 +112,11 @@ def validate_policy(policy):
             raise ValueError("policy exceeds bounded delegation limits")
     number(policy["minimum_reasoning_minutes"])
     number(policy["catalog_max_age_hours"], 0.01)
+    triggers = policy.get("triggers", {})
+    if not isinstance(triggers, dict) or set(triggers) - {"explicit_user", "verification_gap", "deadline_parallel"}:
+        raise ValueError("invalid trigger switches")
+    for enabled in triggers.values():
+        flag(enabled)
     for lane in LANES:
         candidates = policy["lanes"][lane]
         if not isinstance(candidates, list) or not candidates:
@@ -117,6 +126,65 @@ def validate_policy(policy):
                 raise ValueError("invalid route")
             enum(pair[1], EFFORTS[:4])
     return policy
+
+
+def classify_task(task, mode="evidence-v1"):
+    """Deterministic rubric over supplied evidence, not an NLP classifier.
+
+    Existing complexity is a lower bound. Stronger signals can only raise it.
+    Risk and uncertainty are observations that the coordinator must substantiate.
+    """
+    declared = enum(task["complexity"], LANES)
+    consequence = enum(task["consequence"], {"low", "normal", "high"})
+    uncertainty = enum(task["uncertainty"], {"low", "normal", "high"})
+    enum(mode, {"legacy", "evidence-v1"})
+    reasons = []
+    rank = LANES.index(declared)
+    if mode == "evidence-v1":
+        a = task["assessment"]
+        if not isinstance(a, dict) or not isinstance(a.get("evidence"), str) or not a["evidence"].strip():
+            raise ValueError("task assessment needs concrete evidence")
+        kind = enum(a["kind"], {"extract", "transform", "implement", "debug", "review", "research", "design"})
+        specification = enum(a["specification"], {"exact", "bounded", "open"})
+        verification = enum(a["verification"], {"deterministic", "tests", "judgment"})
+        scope = enum(a["scope"], {"local", "cross_component", "system"})
+        input_form = enum(a["input_form"], {"text", "visual"})
+        boundary = enum(a["boundary"], {"clear", "adjacent"})
+        if boundary == "adjacent" and (not isinstance(a.get("boundary_evidence"), str) or not a["boundary_evidence"].strip()):
+            raise ValueError("ambiguous boundary needs concrete evidence")
+        # All six conditions are required; a label like 'simple' cannot admit Luna.
+        mechanical = (kind in {"extract", "transform"} and specification == "exact"
+                      and verification == "deterministic" and scope == "local"
+                      and consequence == "low" and uncertainty == "low" and input_form == "text")
+        if mechanical:
+            reasons.append("deterministic-local-low-risk")
+        else:
+            rank = max(rank, 1)
+            reasons.append("requires-general-judgment")
+        if scope in {"cross_component", "system"}:
+            rank = max(rank, 2)
+            reasons.append("cross-component-reasoning")
+        if specification == "open":
+            rank = max(rank, 2)
+            reasons.append("open-specification")
+        if kind in {"debug", "review", "design"} and verification == "judgment":
+            rank = max(rank, 2)
+            reasons.append("judgment-heavy-investigation")
+        if scope == "system" and (specification == "open" or uncertainty == "high"):
+            rank = 3
+            reasons.append("open-or-uncertain-system-work")
+    if consequence == "high":
+        rank = 3
+        reasons.append("high-consequence")
+    if uncertainty == "high":
+        rank = max(rank, 2)
+        reasons.append("high-uncertainty")
+    if rank == 0 and (consequence != "low" or uncertainty != "low"):
+        rank = 1
+        reasons.append("mechanical-risk-condition-not-met")
+    if LANES.index(declared) >= rank:
+        reasons.append("declared-complexity-floor")
+    return {"mode": mode, "lane": LANES[rank], "reasons": reasons}
 
 
 def catalog_models(catalog, host_id, now, policy):
@@ -178,6 +246,8 @@ def _decide(request, policy, now):
                  {"none", "explicit_user", "verification_gap", "deadline_parallel"})
     if basis == "none":
         return finish("direct-by-default-no-delegation-need")
+    if not policy.get("triggers", {}).get(basis, True):
+        return finish("delegation-trigger-disabled")
     evidence = delegation.get("evidence")
     if not isinstance(evidence, str) or not evidence.strip():
         return finish("delegation-evidence-missing")
@@ -262,18 +332,22 @@ def _decide(request, policy, now):
         return finish("fix-environment-or-capability-without-reasoning-escalation")
     if failure_kind != "none" and attempts >= policy["max_recovery_attempts"]:
         return finish("recovery-budget-exhausted")
-    lane = enum(task["complexity"], LANES)
-    consequence = enum(task["consequence"], {"low", "normal", "high"})
-    uncertainty = enum(task["uncertainty"], {"low", "normal", "high"})
-    if consequence == "high":
-        lane = "critical"
-    elif uncertainty == "high" and LANES.index(lane) < 2:
-        lane = "complex"
-    elif lane == "mechanical" and (consequence != "low" or uncertainty != "low"):
-        lane = "routine"
+    classification_mode = policy.get("classification_mode", "legacy")
+    if classification_mode == "evidence-v1" and "assessment" not in task:
+        return finish("task-assessment-missing")
+    classification = classify_task(task, classification_mode)
+    lane = classification["lane"]
+    strategy = policy.get("routing_strategy", "balanced")
+    assessment = task.get("assessment", {})
+    if classification_mode == "evidence-v1" and strategy == "premium" and assessment["boundary"] == "adjacent":
+        lane = LANES[min(3, LANES.index(lane) + 1)]
+        classification["reasons"].append("premium-ambiguous-boundary-upgrade")
     # Only classified reasoning/verification failures may raise one lane.
     if failure_kind in {"reasoning", "verification"}:
         lane = LANES[min(3, LANES.index(lane) + 1)]
+        classification["reasons"].append("diagnosed-reasoning-recovery")
+    classification["lane"] = lane
+    out["classification"] = classification
     out["lane"] = lane
     explicit = request.get("explicit", {})
     models = catalog_models(request["catalog"], host["id"], now, policy)
@@ -281,6 +355,16 @@ def _decide(request, policy, now):
     if current.get("source") == "runtime" and isinstance(current.get("model"), str) and current.get("effort") in EFFORTS:
         out["current_observed"] = {"model": current["model"], "effort": current["effort"]}
     choices = policy["lanes"][lane]
+    # Economic pilot preserves the assessed lane and its recovery floor. Only
+    # the candidate pool changes; output never claims the model is proven adequate.
+    if (classification_mode == "evidence-v1" and strategy == "economy" and lane == "routine"
+            and failure_kind == "none" and task["consequence"] == "low" and task["uncertainty"] == "low"
+            and assessment["kind"] in {"implement", "debug"} and assessment["specification"] == "exact"
+            and assessment["verification"] == "tests" and assessment["scope"] == "local"
+            and assessment["input_form"] == "text" and assessment["boundary"] == "clear"):
+        choices = policy["lanes"]["mechanical"]
+        classification["reasons"].append("economy-testable-local-trial")
+        out["candidate_pool"] = "mechanical"
     requested_model, requested_effort = explicit.get("model"), explicit.get("effort")
     if requested_model is not None or requested_effort is not None:
         if requested_effort is not None:
