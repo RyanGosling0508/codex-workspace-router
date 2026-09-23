@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation / 文档中心
+    url: https://github.com/RyanGosling0508/codex-workspace-router/tree/main/docs
+    about: Setup, presets, usage and troubleshooting / 部署、预设、使用与排查

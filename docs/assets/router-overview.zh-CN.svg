@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+<title id="title">Codex Workspace Router</title><desc id="desc">默认保持主任务；需要委派时，再选择合适的子模型。</desc>
+<defs><pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#dce5dc" stroke-width=".5"/></pattern><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#708775"/></marker></defs>
+<rect width="1200" height="500" rx="24" fill="#f2f5ee"/><rect width="1200" height="500" rx="24" fill="url(#grid)"/>
+<g font-family="Segoe UI, Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<rect x="44" y="36" width="38" height="38" rx="11" fill="#24483d"/><path d="M56 46V64M57 51H67V62" stroke="#dbea9d" stroke-width="2" fill="none"/><circle cx="56" cy="46" r="3" fill="#dbea9d"/><circle cx="56" cy="65" r="3" fill="#dbea9d"/><circle cx="67" cy="63" r="3" fill="#dbea9d"/>
+<text x="94" y="61" font-size="15" fill="#173b32" font-weight="650" letter-spacing="2">WORKSPACE ROUTER</text>
+<text x="44" y="122" font-size="36" fill="#173b32" font-weight="650" >协作有边界，模型有分工。</text>
+<text x="44" y="154" font-size="17" fill="#536b5c" font-weight="400" >默认保持主任务；需要委派时，再选择合适的子模型。</text>
+<text x="1148" y="57" font-size="12" fill="#637467" font-weight="600" text-anchor="end" letter-spacing="1.4">CODEX SKILL + ROUTER STUDIO</text>
+<path d="M230 247H323M553 247H622V219H729M622 247V286H729" fill="none" stroke="#708775" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="44" y="214" width="186" height="66" rx="14" fill="#fff" stroke="#d5dfd4"/>
+<text x="137" y="254" font-size="20" fill="#173b32" font-weight="600" text-anchor="middle">收到任务</text>
+<rect x="323" y="214" width="230" height="66" rx="14" fill="#254a3f"/>
+<text x="438" y="254" font-size="20" fill="#f4f7e9" font-weight="600" text-anchor="middle">必要性检查</text>
+<rect x="729" y="190" width="426" height="58" rx="13" fill="#e4edcf" stroke="#c9d8ad"/>
+<text x="750" y="226" font-size="19" fill="#173b32" font-weight="600" >主任务直接完成</text>
+<text x="1137" y="224" font-size="11" fill="#536644" font-weight="600" text-anchor="end">通常如此</text>
+<rect x="729" y="262" width="426" height="58" rx="13" fill="#fff" stroke="#d5dfd4"/>
+<text x="750" y="299" font-size="19" fill="#173b32" font-weight="600" >子代理 → 验收</text>
+<text x="1137" y="297" font-size="11" fill="#637467" font-weight="600" text-anchor="end">确有需要</text>
+<rect x="44" y="352" width="350" height="92" rx="15" fill="#ffffff" stroke="#d5dfd4"/>
+<text x="64" y="382" font-size="20" fill="#254a3f" font-weight="650" >经济方案</text>
+<text x="64" y="415" font-size="14" fill="#617462" font-weight="400" >可验收的局部任务先试 Luna</text>
+<rect x="424" y="352" width="350" height="92" rx="15" fill="#254a3f" stroke="#254a3f"/>
+<text x="444" y="382" font-size="20" fill="#f6f8ee" font-weight="650" >稳定方案</text>
+<text x="444" y="415" font-size="14" fill="#d6e1cb" font-weight="400" >日常 Sol · 关键 Astra</text>
+<text x="753" y="380" font-size="10" fill="#d7e89b" font-weight="600" text-anchor="end" letter-spacing="1.4">默认</text>
+<rect x="804" y="352" width="350" height="92" rx="15" fill="#ffffff" stroke="#d5dfd4"/>
+<text x="824" y="382" font-size="20" fill="#254a3f" font-weight="650" >土豪方案</text>
+<text x="824" y="415" font-size="14" fill="#617462" font-weight="400" >模糊边界优先升档</text>
+<text x="44" y="477" font-size="10" fill="#6f8071" font-weight="500" letter-spacing="1.1">规则示意 · 非实时执行记录</text>
+<text x="1154" y="477" font-size="10" fill="#6f8071" font-weight="500" text-anchor="end" letter-spacing="1.1">本地配置 / 双语控制台 / 有限协作</text>
+</g></svg>

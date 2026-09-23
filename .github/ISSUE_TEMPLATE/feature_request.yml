@@ -1,0 +1,22 @@
+name: Feature or policy proposal / 功能与策略建议
+description: Explain a real workflow gap or routing improvement / 说明真实使用缺口
+title: "[Proposal]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and example / 问题与实例
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 预期改进
+      description: Explain the effect on direct work, presets, host boundaries or the console.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and trade-offs / 依据与取舍
+      description: For model changes, include exact model/effort, task, tools, acceptance and observed usage. Avoid private data.

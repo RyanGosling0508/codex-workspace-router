@@ -1,0 +1,32 @@
+name: Bug report / 问题报告
+description: Report a reproducible router, console or installation problem / 提交可复现问题
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Please omit credentials, launch tokens and private workspace data. 请勿粘贴凭据、控制台令牌或私人工作区资料。"
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / 环境
+      description: Router version, OS, Python, Codex client and local or SSH host
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce / 复现步骤
+      description: Include a minimal sanitized policy or request only when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior / 预期与实际
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / 验证依据
+      description: Sanitized error text, screenshots or test results; include any skipped checks.
