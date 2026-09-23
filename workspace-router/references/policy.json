@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "version": "1.1.0",
+  "preference": "quality-first",
+  "enabled": true,
+  "delegation_mode": "evidence-only",
+  "max_children": 1,
+  "max_children_per_request": 2,
+  "max_recovery_attempts": 1,
+  "minimum_reasoning_minutes": 3,
+  "catalog_max_age_hours": 6,
+  "lanes": {
+    "mechanical": [["gpt-6-luna", "medium"], ["gpt-6-sol", "medium"], ["gpt-6-astra", "low"]],
+    "routine": [["gpt-6-sol", "medium"], ["gpt-6-astra", "medium"]],
+    "complex": [["gpt-6-sol", "high"], ["gpt-6-astra", "high"]],
+    "critical": [["gpt-6-astra", "high"]]
+  }
+}

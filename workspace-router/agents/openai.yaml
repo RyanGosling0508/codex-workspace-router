@@ -1,0 +1,6 @@
+interface:
+  display_name: "Workspace Router"
+  short_description: "Direct work by default; delegate only for a concrete need"
+  default_prompt: "Use $workspace-router to keep this project with the main agent unless a concrete need justifies bounded delegation; preserve its host, file scope, and acceptance criteria."
+policy:
+  allow_implicit_invocation: true
