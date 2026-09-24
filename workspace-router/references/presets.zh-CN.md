@@ -1,4 +1,4 @@
-# 三套预设与依据 · 1.3
+# 三套预设与依据 · 1.4
 
 [English](presets.md) | **简体中文**
 
@@ -7,6 +7,7 @@
 | 任务 | 经济 | 稳定（默认） | 土豪 |
 |---|---|---|---|
 | 文本确定性提取 / 转换 | Luna / High | Luna / High | Luna / High |
+| 精确、低风险、限定来源的只读事实核查 | Luna / High 先试 | Luna / High 先试 | Sol / High |
 | 精确、低风险、可测试的局部实现 / 修复 | Luna / High 先试 | Sol / Medium | Sol / High |
 | 其他常规任务 | Sol / Medium | Sol / Medium | Sol / High |
 | 跨组件、需求开放、复杂调试 / 判断 | Sol / High | Sol / High | Astra / High |
@@ -14,6 +15,16 @@
 | 有依据的相邻档位模糊 | 不启用轻量试用；按已命中最高档 | 按已命中最高档 | 在已命中最高档上再升一级，最高关键档 |
 
 经济方案先判断能否验收，再尝试更便宜的候选。没有实测前无法证明某个模型一定完成，所以称为“受限试用”。它不会为了省钱降低关键档，也不把验证失败当成功。土豪方案也不会让规则明确的文本转换一律使用 Astra，更高强度不保证每个任务都更好。
+
+## GPT-6 指南复核 · 1.4
+
+现有 Sol/Medium、Luna/High 已符合[官方子代理起点](https://learn.chatgpt.com/docs/agent-configuration/subagents)。官方只读探索与文档核查示例支持在文本提取之外增加一条受限路线。Sol 继续负责常规实现与调查；本次更新任务边界，不重新替换模型名，也不假定发布日期。
+
+经济、稳定方案新增**限定来源的只读核查试用**，必须全部满足：基础档 routine、work_type 为 read、write_paths 为空、kind 为 research、specification 为 exact、verification 为 sources、scope 为 local、仅文本、边界明确、低影响、低不确定性、无恢复失败。`source_evidence` 必须说明限定的来源及相关版本，以及怎样按引用位置逐项核实事实，只有来源列表不够。适用于查明确的文档事实或指定代码符号；正确性证明、未知根因诊断、来源冲突解释、开放式研究不适用。这些严格条件是我们的工程选择。
+
+试用复用当前 mechanical 候选池，实际任务仍属 routine。推理或验收失败且诊断明确时恢复到 complex；网络、认证故障不升级模型。土豪方案保持 Sol/High。旧请求未使用 `verification: sources` 时路线不变；legacy 分档不启用本试用。用户指定仍优先。脚本只检查字段和规则，主代理必须核对返回的来源后才能验收。
+
+于 2026-09-23（America/New_York）复核官方 [Sol](https://developers.openai.com/api/docs/models/gpt-6-sol)、[Luna](https://developers.openai.com/api/docs/models/gpt-6-luna) 页面。API 功能清单不代表当前子代理工具可用性，仍以本机实测能力集为准；API 价格不能证明订阅额度节省。1.4 未新增模型输出 A/B 实测，测试验证准入、恢复和兼容性。以下历史第三方报告未在本次重新核验。
 
 ## 严格条件
 

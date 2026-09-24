@@ -1,7 +1,7 @@
 {
   "economy": {
     "schema_version": 1,
-    "version": "1.3.0",
+    "version": "1.4.0",
     "preference": "quality-first",
     "enabled": true,
     "delegation_mode": "evidence-only",
@@ -70,7 +70,7 @@
   },
   "balanced": {
     "schema_version": 1,
-    "version": "1.3.0",
+    "version": "1.4.0",
     "preference": "quality-first",
     "enabled": true,
     "delegation_mode": "evidence-only",
@@ -139,7 +139,7 @@
   },
   "premium": {
     "schema_version": 1,
-    "version": "1.3.0",
+    "version": "1.4.0",
     "preference": "quality-first",
     "enabled": true,
     "delegation_mode": "evidence-only",

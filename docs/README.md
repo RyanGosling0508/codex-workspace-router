@@ -2,6 +2,8 @@
 
 **English** | [简体中文](README.zh-CN.md) · [Project home](../README.md)
 
+**[Model & routing guide](model-guide.md)** — Official definitions, diagrams, boundary examples, and design review.
+
 | Start here | What it covers |
 |---|---|
 | [Installation](installation.md) | Local setup, client discovery, SSH, upgrades and rollback |

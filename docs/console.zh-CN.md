@@ -14,7 +14,7 @@ python run_console.py --open
 
 默认编辑仓库内的示例策略，**不会修改已安装 Skill**。关闭运行 Python 的终端即可停止服务。
 
-先按 [部署说明](installation.zh-CN.md) 安装或升级到 1.3，然后编辑实际安装的 Skill：
+先按 [部署说明](installation.zh-CN.md) 安装或升级到 1.4，然后编辑实际安装的 Skill：
 
 ```sh
 python run_console.py --installed --open
@@ -60,10 +60,14 @@ python -B -m unittest console.test_console -v
 python -B -m unittest discover -s workspace-router/tests -v
 ```
 
-## 推荐默认（1.3）
+## 推荐默认（1.4）
 
 点击 **恢复推荐默认**，同时重置触发条件、协作限额、分档方式和全部模型候选。先载入草稿，再确认应用。模型页面解释适用边界，模拟实验室显示命中原因。详见 [任务分界](../workspace-router/references/task-boundaries.zh-CN.md)。导入旧配置会明确显示旧版分档，不会静默改用新规则。
 
 ## 三套完整预设
 
 经济 / 稳定 / 土豪，默认稳定。预设包含完整模型候选与边界策略；选择后先模拟，再确认应用。详见[严格条件与官方、用户实测依据](../workspace-router/references/presets.zh-CN.md)。三套都不切换主模型，也不承诺省订阅额度。
+
+新增“限定来源的只读核查”模拟场景：经济、稳定试用 Luna/High，土豪保持 Sol/High。此模拟只验证规则，不调用模型。
+
+顶部“模型科普”按钮在新标签页打开 GitHub 的中文专题页，不会修改配置。

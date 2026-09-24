@@ -1,4 +1,4 @@
-# Presets and evidence · 1.3
+# Presets and evidence · 1.4
 
 **English** | [简体中文](presets.zh-CN.md)
 
@@ -7,11 +7,22 @@
 | Task | Economy | Balanced (default) | Premium |
 |---|---|---|---|
 | Deterministic text extraction/transformation | Luna / High | Luna / High | Luna / High |
+| Exact, low-risk read-only fact check against bounded sources | Try Luna / High | Try Luna / High | Sol / High |
 | Exact, low-risk, testable local implementation/fix | Try Luna / High | Sol / Medium | Sol / High |
 | Other routine work | Sol / Medium | Sol / Medium | Sol / High |
 | Cross-component, open, difficult debugging/judgment | Sol / High | Sol / High | Astra / High |
 | High-consequence decisions or open/uncertain system design | Astra / High | Astra / High | Astra / XHigh |
 | Evidenced adjacent-lane ambiguity | No lightweight trial; highest established lane | Highest established lane | Promote one lane, capped at critical |
+
+## GPT-6 guidance refresh · 1.4
+
+The existing Sol/Medium and Luna/High settings already match the [official subagent starting points](https://learn.chatgpt.com/docs/agent-configuration/subagents). Its read-only explorer and documentation examples support a narrow expansion beyond extraction. Sol remains the implementation and investigation workhorse; this update changes eligible task boundaries, not model IDs or an assumed release date.
+
+Economy and Balanced now allow a **focused source-check trial** only when the assessed lane is routine, work type read, write paths empty, kind research, specification exact, verification sources, scope local, input text, boundary clear, consequence low, uncertainty low, and no recovery is in progress. `source_evidence` must describe bounded sources (including relevant versions) and how each factual claim will be checked against cited locations. A source list alone is insufficient. This is for locating documented facts or a prescribed code symbol, not proving correctness, diagnosing an unknown cause, interpreting conflicting evidence or open-ended research. These stricter cutoffs are our engineering judgment.
+
+The trial reuses the configured mechanical candidate pool while preserving the routine classification. A diagnosed reasoning/verification failure recovers to complex; network/auth failures do not trigger a stronger model. Premium retains Sol/High. Existing requests without `verification: sources` keep their routes, and legacy classification never enables this trial. Explicit user choices still win. The helper checks field structure, not factual truth: the coordinator must inspect the returned references before acceptance.
+
+Reviewed official [Sol](https://developers.openai.com/api/docs/models/gpt-6-sol) and [Luna](https://developers.openai.com/api/docs/models/gpt-6-luna) pages on 2026-09-23 (America/New_York). API feature lists are not runtime availability; use this host's observed spawn catalog. API prices do not establish subscription savings. No new model-output A/B evaluation was run for 1.4; tests cover admission, recovery and compatibility. The earlier third-party reports below were not revalidated in this refresh.
 
 ## Admission and recovery
 

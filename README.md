@@ -2,6 +2,8 @@
 
 **Keep everyday work direct. Give justified subagent work a clear model policy.**
 
+**[Model & routing guide](docs/model-guide.md)** — Official definitions, diagrams, boundary examples, and design review.
+
 **English** | [简体中文](README.zh-CN.md)
 
 [![Validate](https://github.com/RyanGosling0508/codex-workspace-router/actions/workflows/validate.yml/badge.svg)](https://github.com/RyanGosling0508/codex-workspace-router/actions/workflows/validate.yml)
@@ -55,6 +57,7 @@ Default install location: `$CODEX_HOME/skills/workspace-router` or `~/.codex/ski
 | Task | Economy | Balanced · default | Premium |
 |---|---|---|---|
 | Deterministic text extraction/transformation | Luna / High | Luna / High | Luna / High |
+| Exact, low-risk read-only fact check against bounded sources | Try Luna / High | Try Luna / High | Sol / High |
 | Exact, low-risk local implementation with tests | Try Luna / High | Sol / Medium | Sol / High |
 | Other routine work | Sol / Medium | Sol / Medium | Sol / High |
 | Complex debugging and cross-component analysis | Sol / High | Sol / High | Astra / High |

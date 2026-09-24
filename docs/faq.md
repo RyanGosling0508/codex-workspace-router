@@ -16,7 +16,7 @@ The helper and console make no model API calls and require no separate router ke
 
 ## Why did Economy choose Sol or Astra?
 
-The Luna trial needs exact requirements, meaningful tests, local text-only work, clear boundaries, low consequence and low uncertainty. Other work follows its established lane; high-consequence work keeps the critical floor. See [all conditions](../workspace-router/references/presets.md).
+The implementation trial needs exact requirements and meaningful tests. The source-check trial instead needs read-only factual research against bounded, verifiable sources. Both require local text-only work, clear boundaries, low consequence and low uncertainty. Other work follows its established lane; high-consequence work keeps the critical floor. See [all conditions](../workspace-router/references/presets.md).
 
 ## The Skill does not appear
 
@@ -43,3 +43,7 @@ Only while editing or simulating policies. After saving, you can close it. The S
 ## Can it control my browser or remote computer?
 
 It does not add tools. Existing Codex permissions and runtime capabilities govern browser, computer and SSH work. Shared interactive actions remain with the coordinator.
+
+## What does the official Default model picker do?
+
+The app’s Default option uses recommended model/reasoning presets for its Power slider; explicitly choosing a model limits the slider to that model. This is distinct from this skill’s child delegation policy. It does not establish per-prompt difficulty routing. See the [official model controls](https://learn.chatgpt.com/docs/models).

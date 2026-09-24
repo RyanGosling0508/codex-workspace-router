@@ -2,6 +2,8 @@
 
 **日常工作直接完成；需要子代理时，按明确规则选择模型。**
 
+**[模型与路由科普](docs/model-guide.zh-CN.md)** — 官方定义、图解、分类反例与设计复核。
+
 [English](README.md) | **简体中文**
 
 [![Validate](https://github.com/RyanGosling0508/codex-workspace-router/actions/workflows/validate.yml/badge.svg)](https://github.com/RyanGosling0508/codex-workspace-router/actions/workflows/validate.yml)
@@ -55,6 +57,7 @@ $workspace-router 帮我实现这个功能，减少不必要的代理开销。
 | 任务 | 经济方案 | 稳定方案 · 默认 | 土豪方案 |
 |---|---|---|---|
 | 确定性文本提取 / 转换 | Luna / High | Luna / High | Luna / High |
+| 精确、低风险、限定来源的只读事实核查 | Luna / High 先试 | Luna / High 先试 | Sol / High |
 | 精确、低风险、有测试的局部实现 | 先试 Luna / High | Sol / Medium | Sol / High |
 | 其他常规任务 | Sol / Medium | Sol / Medium | Sol / High |
 | 复杂调试、跨组件分析 | Sol / High | Sol / High | Astra / High |

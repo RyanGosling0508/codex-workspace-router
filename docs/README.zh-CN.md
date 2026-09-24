@@ -2,6 +2,8 @@
 
 [English](README.md) | **简体中文** · [项目首页](../README.zh-CN.md)
 
+**[模型与路由科普](model-guide.zh-CN.md)** — 官方定义、图解、分类反例与设计复核。
+
 | 从这里开始 | 内容 |
 |---|---|
 | [部署指南](installation.zh-CN.md) | 本地安装、发现目录、SSH、升级与回滚 |

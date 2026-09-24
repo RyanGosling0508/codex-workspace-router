@@ -90,6 +90,10 @@ class ConsoleTests(unittest.TestCase):
         self.assertEqual(simulate(presets['premium'], {'scenario': 'borderline'})['result']['recommended']['model'], 'gpt-6-astra')
 
     def test_new_scenarios_explain_their_lane(self):
+        for profile, expected in [('economy', 'gpt-6-luna'), ('balanced', 'gpt-6-luna'), ('premium', 'gpt-6-sol')]:
+            result = simulate(self.store.state()['presets'][profile], {'scenario': 'source_check'})['result']
+            self.assertEqual(result['recommended']['model'], expected)
+            self.assertEqual(result['lane'], 'routine')
         extraction = simulate(self.policy, {'scenario': 'mechanical'})['result']
         self.assertEqual(extraction['recommended'], {'model': 'gpt-6-luna', 'effort': 'high'})
         architecture = simulate(self.policy, {'scenario': 'architecture'})['result']

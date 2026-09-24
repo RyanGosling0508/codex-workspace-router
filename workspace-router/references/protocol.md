@@ -80,3 +80,7 @@ Optional `triggers` contains boolean `explicit_user`, `verification_gap` and `de
 ## Preset behavior (1.3)
 
 `routing_strategy` is `economy`, `balanced` (default when absent), or `premium`. Read [presets and evidence](presets.md). In evidence-v1, assessment also requires `input_form` (`text`/`visual`) and `boundary` (`clear`/`adjacent`); adjacent requires concrete string `boundary_evidence`. Text means no visual perception is required; source code is text. Do not mark important unresolved uncertainty merely adjacent. Economic local trials retain routine classification but record `candidate_pool: mechanical`; failure recovery starts from routine. Premium promotes evidenced ambiguity before diagnosed recovery. Explicit user routes remain authoritative.
+
+## Focused source-check protocol (1.4)
+
+`task.assessment.verification` additionally accepts `sources`. Supply `source_evidence` describing the bounded sources/versions and comparison method; empty or missing evidence closes delegation. The Economy/Balanced trial requires exact, local, low-risk, low-uncertainty text research, `work_type: read`, empty write paths, a clear boundary, no recovery and routine classification. It records `candidate_pool: mechanical` and `focused-source-check-trial`; it does not lower the task lane. Recovery and user-pinned routes behave as before. Old request formats and legacy policies keep their previous routes. See [presets](presets.md).

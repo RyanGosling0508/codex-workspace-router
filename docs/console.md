@@ -14,7 +14,7 @@ python run_console.py --open
 
 This edits the repository sample policy, **not your installed Skill**. Close the Python terminal to stop the server.
 
-After installing or upgrading the Skill to 1.3 using the [installation guide](installation.md), edit the installed policy:
+After installing or upgrading the Skill to 1.4 using the [installation guide](installation.md), edit the installed policy:
 
 ```sh
 python run_console.py --installed --open
@@ -60,10 +60,14 @@ python -B -m unittest console.test_console -v
 python -B -m unittest discover -s workspace-router/tests -v
 ```
 
-## Recommended defaults (1.3)
+## Recommended defaults (1.4)
 
 Use **Restore recommended defaults** to reset triggers, limits, classification mode and all model lanes together. It loads a draft, so review and apply as usual. The model page explains admission conditions and the simulation lab shows matching reasons. [Read the task boundaries](../workspace-router/references/task-boundaries.md). Old imported policies remain labeled Legacy until explicitly reset.
 
 ## Three complete presets
 
 Economy / Balanced / Premium, with Balanced as default. Each preset replaces routes and boundary behavior; simulate the draft, then review and apply. See [admission rules and official/user evidence](../workspace-router/references/presets.md). No main-model switch or subscription savings guarantee.
+
+The new Focused source check scenario tries Luna/High in Economy and Balanced; Premium retains Sol/High. Simulation checks rules without calling a model.
+
+The header’s “Model guide” link opens the English GitHub guide in a new tab without changing policy.

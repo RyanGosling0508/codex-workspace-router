@@ -17,7 +17,7 @@ import re
 import sys
 import uuid
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 EFFORTS = ["low", "medium", "high", "xhigh", "max", "ultra"]
 LANES = ["mechanical", "routine", "complex", "critical"]
 NON_REASONING_FAILURES = {"environment", "permission", "network", "auth", "model_unavailable"}
@@ -146,7 +146,9 @@ def classify_task(task, mode="evidence-v1"):
             raise ValueError("task assessment needs concrete evidence")
         kind = enum(a["kind"], {"extract", "transform", "implement", "debug", "review", "research", "design"})
         specification = enum(a["specification"], {"exact", "bounded", "open"})
-        verification = enum(a["verification"], {"deterministic", "tests", "judgment"})
+        verification = enum(a["verification"], {"deterministic", "tests", "sources", "judgment"})
+        if verification == "sources" and (not isinstance(a.get("source_evidence"), str) or not a["source_evidence"].strip()):
+            raise ValueError("source verification needs bounded sources and a check method")
         scope = enum(a["scope"], {"local", "cross_component", "system"})
         input_form = enum(a["input_form"], {"text", "visual"})
         boundary = enum(a["boundary"], {"clear", "adjacent"})
@@ -364,6 +366,19 @@ def _decide(request, policy, now):
             and assessment["input_form"] == "text" and assessment["boundary"] == "clear"):
         choices = policy["lanes"]["mechanical"]
         classification["reasons"].append("economy-testable-local-trial")
+        out["candidate_pool"] = "mechanical"
+    # Focused factual research is still routine work, not deterministic extraction.
+    # Explicit source checks opt into this trial; existing request formats retain
+    # their routes. Failed acceptance recovers from the routine floor above.
+    if (classification_mode == "evidence-v1" and strategy in {"economy", "balanced"}
+            and lane == "routine" and failure_kind == "none"
+            and work_type == "read" and not writes
+            and task["consequence"] == "low" and task["uncertainty"] == "low"
+            and assessment["kind"] == "research" and assessment["specification"] == "exact"
+            and assessment["verification"] == "sources" and assessment["scope"] == "local"
+            and assessment["input_form"] == "text" and assessment["boundary"] == "clear"):
+        choices = policy["lanes"]["mechanical"]
+        classification["reasons"].append("focused-source-check-trial")
         out["candidate_pool"] = "mechanical"
     requested_model, requested_effort = explicit.get("model"), explicit.get("effort")
     if requested_model is not None or requested_effort is not None:

@@ -136,6 +136,7 @@ SCENARIOS = {
     'architecture': ('explicit_user', 'read', 'routine', 'normal', 'high', 15, 'quality'),
     'local_trial': ('explicit_user', 'edit', 'routine', 'low', 'low', 10, 'quality'),
     'borderline': ('explicit_user', 'read', 'routine', 'normal', 'normal', 10, 'quality'),
+    'source_check': ('explicit_user', 'read', 'routine', 'low', 'low', 8, 'quality'),
 }
 
 ASSESSMENTS = {
@@ -149,6 +150,7 @@ ASSESSMENTS = {
     'architecture': ('design', 'open', 'judgment', 'system'),
     'local_trial': ('implement', 'exact', 'tests', 'local'),
     'borderline': ('implement', 'bounded', 'tests', 'local'),
+    'source_check': ('research', 'exact', 'sources', 'local'),
 }
 
 def simulate(policy, options):
@@ -161,6 +163,8 @@ def simulate(policy, options):
     assessment = dict(zip(fields, ASSESSMENTS[scenario]))
     assessment['evidence'] = 'Synthetic fixture with declared specification, verification, scope and risk'
     assessment.update(input_form='text', boundary='adjacent' if scenario == 'borderline' else 'clear')
+    if scenario == 'source_check':
+        assessment['source_evidence'] = 'Pinned SDK reference and declaration; compare one documented default and cite both locations'
     if scenario == 'borderline':
         assessment['boundary_evidence'] = 'Known local API; ownership of one adjacent state interaction is unresolved'
     if 'minutes' in options:

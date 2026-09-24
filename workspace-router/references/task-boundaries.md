@@ -1,4 +1,4 @@
-# Task boundaries · recommended defaults 1.3
+# Task boundaries · recommended defaults 1.4
 
 [Three presets and empirical evidence](presets.md)
 
@@ -35,7 +35,7 @@ Under `classification_mode: "evidence-v1"`, `task.assessment` is required after 
 
 - `kind`: `extract`, `transform`, `implement`, `debug`, `review`, `research`, `design`. Select the work actually delegated, not the overall project title.
 - `specification`: `exact` means rules and edge cases are prescribed; `bounded` means requirements are clear with implementation choices remaining; `open` means consequential requirements or design choices remain unresolved.
-- `verification`: `deterministic` means exact comparison/schema/rules can establish acceptance; `tests` means meaningful tests or explicit behavioral checks; `judgment` means acceptance needs reasoning, interpretation or visual judgment. Having some tests does not make a correctness review deterministic.
+- `verification`: `sources` means factual comparison against bounded, cited sources (requires `source_evidence`, see below); `deterministic` means exact comparison/schema/rules can establish acceptance; `tests` means meaningful tests or explicit behavioral checks; `judgment` means acceptance needs reasoning, interpretation or visual judgment. Having some tests does not make a correctness review deterministic.
 - `scope`: `local` means one bounded component or artifact set with stable interfaces; `cross_component` means reasoning across interacting components; `system` means system-wide constraints, architecture or contracts. File count is not the criterion: many files under one exact mapping may still be local.
 - `input_form`: `text` requires no visual perception (source code counts as text); `visual` requires image/OCR/visual interpretation.
 - `boundary`: `clear` or `adjacent`. Adjacent-lane ambiguity requires concrete, nonempty `boundary_evidence`. Significant unresolved uncertainty must still be rated high. The defaults table describes Balanced; see presets for exceptions.
@@ -44,6 +44,10 @@ Under `classification_mode: "evidence-v1"`, `task.assessment` is required after 
 High consequence means a mistake could materially affect safety, money, irreversible data loss or access controls. Mentioning a production system, security, medicine or money does not by itself establish high impact: classify the actual delegated decision and its possible consequences. Unknown risk needs investigation, not an invented low rating. High uncertainty includes competing untested hypotheses or unclear constraints. A known reproduction with a narrow proven cause may be routine debugging; debugging based on incomplete evidence is not.
 
 Missing assessment returns `direct` with `task-assessment-missing`; malformed evidence returns the normal invalid-input direct result. Neither grants permission to perform unsafe or out-of-scope work. The helper verifies structure and deterministic rules, not the truth of supplied evidence, and does not classify raw natural language.
+
+## Focused source checks (1.4)
+
+`verification: sources` is an additional acceptance mode for exact factual questions. It requires nonempty `source_evidence` naming bounded sources/versions and a concrete comparison method. Example: “Check the pinned SDK reference and declaration for the timeout default; cite both locations and flag disagreement.” This does not make the task deterministic. Economy and Balanced can try the mechanical candidates only for routine, local, text-only research with read-only work, no write paths, low consequence/uncertainty and a clear boundary. Missing source evidence closes delegation. Ordinary research remains Sol/Medium; judgment-heavy investigation retains its higher lane. Conflicting sources require reassessment, not a low-uncertainty label. See [preset admission and evidence](presets.md).
 
 ## Fallbacks and exclusions
 
